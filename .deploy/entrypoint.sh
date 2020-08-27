@@ -7,11 +7,7 @@ composer install --no-interaction --prefer-dist --optimize-autoloader
 echo "🎬 artisan commands"
 
 php artisan cache:clear
-
-if [ -f artisan]
-then
-    php artisan migrate --force
-fi
+php artisan migrate --force
 
 echo "🎬 rewrite permissions"
 
