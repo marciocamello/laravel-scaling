@@ -2,6 +2,7 @@
 
 echo "🎬 entrypoint.sh"
 
+composer install
 composer dump-autoload --no-interaction --no-dev --optimize
 
 echo "🎬 artisan commands"
@@ -18,4 +19,4 @@ chown -R www-data:www-data /home/bootstrap/cache
 
 echo "🎬 start supervisord"
 
-supervisord -c $LARAVEL_PATH/.deploy/config/supervisor.conf
+supervisord -c $LARAVEL_PATH/.deploy/process/supervisor.conf
