@@ -2,8 +2,7 @@
 
 echo "🎬 entrypoint.sh"
 
-composer install
-composer dump-autoload --no-interaction --no-dev --optimize
+composer install --optimize-autoloader --no-dev
 
 echo "🎬 artisan commands"
 
