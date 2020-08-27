@@ -11,7 +11,7 @@ ENV LARAVEL_PATH=/home
 WORKDIR $LARAVEL_PATH
 
 # ADD SITE.SH
-COPY /.deploy/entrypoint.sh /usr/local/bin
+COPY /.deploy/cron/entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # ADDING DEPENDENCIES
@@ -54,7 +54,7 @@ RUN  apk add --no-cache             \
     && docker-php-ext-install pcntl
 
 # Configure PHP-FPM
-COPY ./.deploy/php-fpm/php.ini $PHP_INI_DIR/conf.d/custom.ini
+COPY ./.deploy/cron/php-fpm/php.ini $PHP_INI_DIR/conf.d/custom.ini
 
 # CRON
 RUN echo "* * * * * php /home/artisan schedule:run >> /dev/null 2>&1" >> /etc/crontabs/root
