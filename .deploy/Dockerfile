@@ -67,7 +67,7 @@ RUN pecl channel-update pecl.php.net
 RUN composer self-update
 
 # CRON
-RUN echo "* * * * * php /home/artisan schedule:run >> /dev/null 2>&1" >> /etc/crontabs/root
+#UN echo "* * * * * php /home/artisan schedule:run >> /dev/null 2>&1" >> /etc/crontabs/root
 
 # Remove default server definition
 RUN apk add --no-cache nginx supervisor \
