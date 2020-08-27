@@ -19,4 +19,4 @@ chown -R www-data:www-data /home/bootstrap/cache
 
 echo "🎬 start supervisord"
 
-supervisord -c $LARAVEL_PATH/.deploy/process/supervisor.conf
+supervisord -c $LARAVEL_PATH/.deploy/process/supervisord.conf
