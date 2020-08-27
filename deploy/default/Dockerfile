@@ -11,7 +11,7 @@ ENV LARAVEL_PATH=/home
 WORKDIR $LARAVEL_PATH
 
 # ADD SITE.SH
-COPY ./entrypoint.sh /usr/local/bin
+COPY ./default/entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # ADDING DEPENDENCIES
@@ -54,7 +54,7 @@ RUN  apk add --no-cache             \
     && docker-php-ext-install pcntl
 
 # Configure PHP-FPM
-COPY ./.php-fpm/php.ini $PHP_INI_DIR/conf.d/custom.ini
+COPY ./.deploy/default/php-fpm/php.ini $PHP_INI_DIR/conf.d/custom.ini
 
 # COMPOSER
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -74,12 +74,11 @@ RUN apk add --no-cache nginx supervisor \
     && mkdir -p /run/nginx
 
 # NGINX
-COPY ./nginx/conf.d/ /etc/nginx/conf.d/
+COPY ./.deploy/default/nginx/conf.d/ /etc/nginx/conf.d/
 RUN rm -rf /etc/nginx/sites-enabled
 RUN mkdir -p /etc/nginx/sites-enabled
 
 # Copy app
-RUN pwd
 COPY --chown=www-data:www-data . $LARAVEL_PATH/
 RUN chmod -R 775 $LARAVEL_PATH/storage
 
