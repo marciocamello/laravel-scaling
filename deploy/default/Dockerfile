@@ -11,7 +11,7 @@ ENV LARAVEL_PATH=/home
 WORKDIR $LARAVEL_PATH
 
 # ADD SITE.SH
-COPY ./entrypoint.sh /usr/local/bin
+COPY ./deploy/default/entrypoint.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # ADDING DEPENDENCIES
