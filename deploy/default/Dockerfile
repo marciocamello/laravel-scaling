@@ -74,7 +74,7 @@ RUN apk add --no-cache nginx supervisor \
     && mkdir -p /run/nginx
 
 # NGINX
-COPY ./.deploy/default/nginx/conf.d/ /etc/nginx/conf.d/
+COPY ./deploy/default/nginx/conf.d/ /etc/nginx/conf.d/
 RUN rm -rf /etc/nginx/sites-enabled
 RUN mkdir -p /etc/nginx/sites-enabled
 
