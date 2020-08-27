@@ -79,7 +79,7 @@ RUN rm -rf /etc/nginx/sites-enabled
 RUN mkdir -p /etc/nginx/sites-enabled
 
 # Copy app
-RUN ls -lha
+RUN cd .. && ls -lha
 COPY --chown=www-data:www-data . $LARAVEL_PATH/
 RUN chmod -R 775 $LARAVEL_PATH/storage
 
