@@ -11,8 +11,8 @@ ENV LARAVEL_PATH=/home
 WORKDIR $LARAVEL_PATH
 
 # ADD SITE.SH
-COPY /.deploy-laravel/site.sh /usr/local/bin
-RUN chmod +x /usr/local/bin/site.sh
+COPY /.deploy/entrypoint.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # ADDING DEPENDENCIES
 RUN apk add --no-cache --virtual .build-deps curl wget bash openssl libstdc++ \
