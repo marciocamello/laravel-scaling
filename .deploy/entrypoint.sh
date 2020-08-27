@@ -2,14 +2,16 @@
 
 echo "🎬 entrypoint.sh"
 
-composer install --optimize-autoloader --no-dev
+composer install --no-interaction --prefer-dist --optimize-autoloader
 
 echo "🎬 artisan commands"
 
 php artisan cache:clear
 
-#Production
-#php artisan migrate --no-interaction --force
+if [ -f artisan]
+then
+    php artisan migrate --force
+fi
 
 echo "🎬 rewrite permissions"
 
