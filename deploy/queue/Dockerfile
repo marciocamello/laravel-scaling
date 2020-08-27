@@ -3,7 +3,7 @@ FROM php:7.4-fpm-alpine3.11
 
 # MAINTAINER
 LABEL Maintainer="Marcio Camello <mac3designer@gmail.com>" \
-      Description="Laravel container with PHP-FPM"
+      Description="Laravel container with NGINX and PHP-FPM"
 
 # APPLICATION DIRECTORY
 
@@ -18,7 +18,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN apk add --no-cache --virtual .build-deps curl wget bash openssl libstdc++ \
     nodejs npm openssl-dev git nano unzip \
     autoconf make pkgconf g++ gcc build-base linux-headers \
-    musl-dev make libtool git libxml2-dev supervisor curl zlib-dev
+    musl-dev make libtool git libxml2-dev nginx supervisor curl zlib-dev
 
 # PHP EXTENSIONS
 RUN  apk add --no-cache             \
@@ -65,6 +65,18 @@ RUN pecl channel-update pecl.php.net
 
 # UPDATE COMPOSER
 RUN composer self-update
+
+# CRON
+#UN echo "* * * * * php /home/artisan schedule:run >> /dev/null 2>&1" >> /etc/crontabs/root
+
+# Remove default server definition
+RUN apk add --no-cache nginx supervisor \
+    && mkdir -p /run/nginx
+
+# NGINX
+COPY ./deploy/queue/nginx/conf.d/ /etc/nginx/conf.d/
+RUN rm -rf /etc/nginx/sites-enabled
+RUN mkdir -p /etc/nginx/sites-enabled
 
 # Copy app
 COPY --chown=www-data:www-data . $LARAVEL_PATH/
