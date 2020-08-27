@@ -54,7 +54,7 @@ RUN  apk add --no-cache             \
     && docker-php-ext-install pcntl
 
 # Configure PHP-FPM
-COPY ./.deploy-laravel/php-fpm/php.ini $PHP_INI_DIR/conf.d/custom.ini
+COPY ./.deploy/php-fpm/php.ini $PHP_INI_DIR/conf.d/custom.ini
 
 # COMPOSER
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -74,7 +74,7 @@ RUN apk add --no-cache nginx supervisor \
     && mkdir -p /run/nginx
 
 # NGINX
-COPY ./.deploy-laravel/nginx/conf.d/ /etc/nginx/conf.d/
+COPY ./.deploy/nginx/conf.d/ /etc/nginx/conf.d/
 RUN rm -rf /etc/nginx/sites-enabled
 RUN mkdir -p /etc/nginx/sites-enabled
 
