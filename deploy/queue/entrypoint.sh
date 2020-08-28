@@ -6,6 +6,7 @@ composer install --no-interaction --prefer-dist --optimize-autoloader
 
 echo "🎬 artisan commands"
 
+php artisan optimize
 php artisan cache:clear
 php artisan migrate --force
 

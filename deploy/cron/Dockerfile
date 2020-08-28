@@ -6,7 +6,6 @@ LABEL Maintainer="Marcio Camello <mac3designer@gmail.com>" \
       Description="Laravel container with NGINX and PHP-FPM"
 
 # APPLICATION DIRECTORY
-
 ENV LARAVEL_PATH=/home
 WORKDIR $LARAVEL_PATH
 
@@ -79,13 +78,13 @@ RUN rm -rf /etc/nginx/sites-enabled
 RUN mkdir -p /etc/nginx/sites-enabled
 
 # Copy app
-COPY --chown=www-data:www-data . $LARAVEL_PATH/
-RUN chmod -R 775 $LARAVEL_PATH/storage
+#COPY --chown=www-data:www-data . $LARAVEL_PATH/
+#RUN chmod -R 775 $LARAVEL_PATH/storage
 
 # PERMISSONS
-RUN mkdir -p /home/storage && chown -R www-data:www-data /home/storage
-RUN mkdir -p /home/bootstrap/cache && chown -R www-data:www-data /home/bootstrap/cache
-RUN mkdir -p /home/public && chown -R www-data:www-data /home/public
+#RUN mkdir -p /home/storage && chown -R www-data:www-data /home/storage
+#RUN mkdir -p /home/bootstrap/cache && chown -R www-data:www-data /home/bootstrap/cache
+#RUN mkdir -p /home/public && chown -R www-data:www-data /home/public
 
 # Set any ENVs
 ARG APP_KEY=${APP_KEY}

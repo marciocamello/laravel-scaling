@@ -1,0 +1,198 @@
+version: "2"
+services:
+
+    #LOAD BALANCER
+
+
+    #APP
+    app:
+        image: laravel_app:latest
+        hostname: laravel-app.io
+        container_name: laravel_app
+        build:
+            context: .
+            dockerfile: ./deploy/default/Dockerfile
+        restart: unless-stopped
+        environment:
+            - APP_ENV=local
+            - APP_URL=https://laravel-app.io
+            - DB_HOST=laravel_db
+            - DB_DATABASE=laravelscaling
+            - DB_USERNAME=laravelscaling
+            - DB_PASSWORD=q1w2e3r4
+            - REDIS_HOST=laravel_cache
+        tty: true
+        privileged: false
+        volumes:
+            - .:/home
+        depends_on:
+            - db
+            - cache
+        #deploy:
+            #mode: replicated
+            #replicas: 1
+            #restart_policy:
+                #condition: on-failure
+        networks:
+            laravel_network:
+                ipv4_address: 10.90.0.10
+
+    #DATABASE
+    db:
+        image: 'mariadb:latest'
+        hostname: laravel-db.io
+        container_name: laravel_db
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: q1w2e3r4
+            MYSQL_DATABASE: laravelscaling
+            MYSQL_USER: laravelscaling
+            MYSQL_PASSWORD: q1w2e3r4
+        volumes:
+            - ./deploy/database:/var/lib/mysql
+        command: --skip-grant-tables
+        #deploy:
+            #mode: replicated
+            #replicas: 1
+            #restart_policy:
+                #condition: on-failure
+        networks:
+            laravel_network:
+                ipv4_address: 10.90.0.50
+
+    #PHPMYADMIN
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        hostname: laravel-phpmyadmin.io
+        container_name: laravel_phpmyadmin
+        restart: unless-stopped
+        ports:
+            - 8098:80
+        volumes:
+            - /sessions
+        depends_on:
+            - db
+        environment:
+            - PMA_ARBITRARY=1
+        #deploy:
+            #mode: replicated
+            #replicas: 1
+            #restart_policy:
+                #condition: on-failure
+        networks:
+            laravel_network:
+                ipv4_address: 10.90.0.51
+
+
+    #CACHE
+    cache:
+        image: redis:latest
+        hostname: laravel-cache.io
+        container_name: laravel_cache
+        restart: unless-stopped
+        tty: true
+        privileged: false
+        #deploy:
+            #mode: replicated
+            #replicas: 1
+            #restart_policy:
+                #condition: on-failure
+        networks:
+            laravel_network:
+                ipv4_address: 10.90.0.52
+
+    #CRON
+    cron:
+        image: laravel_cron:latest
+        hostname: laravel-cron.io
+        container_name: laravel_cron
+        build:
+            context: .
+            dockerfile: ./deploy/cron/Dockerfile
+        restart: unless-stopped
+        environment:
+            - APP_ENV=local
+            - DB_HOST=laravel_db
+            - DB_DATABASE=laravelscaling
+            - DB_USERNAME=laravelscaling
+            - DB_PASSWORD=q1w2e3r4
+            - REDIS_HOST=laravel_cache
+        tty: true
+        privileged: false
+        volumes:
+            - .:/home
+        depends_on:
+            - db
+            - cache
+        #deploy:
+            #mode: replicated
+            #replicas: 1
+            #restart_policy:
+                #condition: on-failure
+        networks:
+            laravel_network:
+                ipv4_address: 10.90.0.53
+
+    #QUEUE
+    queue:
+        image: laravel_queue:latest
+        hostname: laravel-queue.io
+        container_name: laravel_queue
+        build:
+            context: .
+            dockerfile: ./deploy/queue/Dockerfile
+        restart: unless-stopped
+        environment:
+            - APP_ENV=local
+            - DB_HOST=laravel_db
+            - DB_DATABASE=laravelscaling
+            - DB_USERNAME=laravelscaling
+            - DB_PASSWORD=q1w2e3r4
+            - QUEUE_CONNECTION=sync
+            - REDIS_HOST=laravel_cache
+        tty: true
+        privileged: false
+        volumes:
+            - .:/home
+        depends_on:
+            - db
+            - cache
+        #deploy:
+            #mode: replicated
+            #replicas: 1
+            #restart_policy:
+                #condition: on-failure
+        networks:
+            laravel_network:
+                ipv4_address: 10.90.0.54
+
+    #LARAVEL ECHO SERVER
+    echo:
+        image: laravel_echo:latest
+        build:
+            context: .
+            dockerfile: ./deploy/echo/Dockerfile
+        hostname: laravel-echo.io
+        container_name: laravel_echo
+        restart: unless-stopped
+        environment:
+            - LARAVEL_ECHO_SERVER_AUTH_HOST=https://laravel-echo.io
+            - LARAVEL_ECHO_SERVER_REDIS_HOST=laravel_cache
+        tty: true
+        privileged: false
+        #deploy:
+            #mode: replicated
+            #replicas: 1
+            #restart_policy:
+                #condition: on-failure
+        networks:
+            laravel_network:
+                ipv4_address: 10.90.0.55
+
+#NETWORK
+networks:
+    laravel_network:
+        ipam:
+            driver: default
+            config:
+                - subnet: 10.90.0.0/24
