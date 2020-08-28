@@ -33,9 +33,9 @@ RUN mkdir -p /etc/nginx/sites-enabled
 RUN npm -g i cross-env laravel-echo-server
 
 # Copy app
-COPY --chown=www-data:www-data ./deploy/echo/.env $LARAVEL_PATH/
-COPY --chown=www-data:www-data ./deploy/echo/laravel-echo-server.json $LARAVEL_PATH/
-COPY --chown=www-data:www-data ./deploy/echo/index.html $LARAVEL_PATH/
+COPY ./deploy/echo/.env $LARAVEL_PATH/
+COPY ./deploy/echo/laravel-echo-server.json $LARAVEL_PATH/
+COPY ./deploy/echo/index.html $LARAVEL_PATH/
 
 # Set any ENVs
 ARG LARAVEL_ECHO_SERVER_AUTH_HOST=${LARAVEL_ECHO_SERVER_AUTH_HOST}
