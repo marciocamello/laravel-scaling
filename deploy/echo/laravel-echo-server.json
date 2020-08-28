@@ -1,0 +1,29 @@
+{
+	"authEndpoint": "/api/broadcasting/auth",
+    "devMode": true,
+	"clients": [
+		{
+			"appId": "cbb5e0dcfa92fed3c52f51373fac6e28",
+			"key": "f2ac0ab0d1de0b0c9e60a3115b1885b0"
+		}
+	],
+	"database": "redis",
+	"host": "",
+	"databaseConfig": {
+		"redis": {
+			"keyPrefix": "laravelscaling"
+		}
+	},
+	"socketio": {},
+	"secureOptions": 67108864,
+	"subscribers": {
+		"http": true,
+		"redis": true
+	},
+	"apiOriginAllow": {
+		"allowCors": true,
+		"allowOrigin": "*",
+		"allowMethods": "GET, DELETE, POST, PUT",
+		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
+	}
+}
